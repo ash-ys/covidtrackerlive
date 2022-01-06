@@ -1,10 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 
 function App() {
+  const [latest, setLatest] = useState([]);
+  const [results, setResults] = useState([])
+  useEffect(()=> {
+    axios
+    .all([
+      axios.get("https://disease.sh/v3/covid-19/all"),
+      axios.get("https://disease.sh/v3/covid-19/countries")
+    ])
+    
+    .then (responseArr =>{
+      setLatest(responseArr[0].data);
+      setResults(responseArr[1].data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  },[]);
+
+  const date= new Date(parseInt(latest.updated));
+  const lastUpdated = date.toString();
+  const countries = results.map(data=>{
+  return (
+  <Card 
+  bg = "light"
+   text= "dark" 
+   className='text-center'
+    border="success"
+     style={{ margin: '10px' }}
+     >
+    
+    <Card.Body>
+      <Card.Title>{data.country}</Card.Title>
+      <Card.Text>
+        Cases {data.cases}
+      </Card.Text>
+    </Card.Body>
+  </Card>
+  );
+});
+
   return (
     <div>
     <CardGroup>
@@ -13,11 +53,11 @@ function App() {
     <Card.Body>
       <Card.Title>Cases</Card.Title>
       <Card.Text>
-        109
+        {latest.cases}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small >Last updated 3 mins ago</small>
+      <small >Last updated {lastUpdated}</small>
     </Card.Footer>
   </Card>
   <Card bg = "danger" text= "white"  className='text-center' border="primary" style={{ margin: '10px' }}>
@@ -25,11 +65,11 @@ function App() {
     <Card.Body>
       <Card.Title>Deaths</Card.Title>
       <Card.Text>
-        0
+      {latest.deaths}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small >Last updated 3 mins ago</small>
+      <small >Last updated {lastUpdated}</small>
     </Card.Footer>
   </Card>
   <Card bg = "success" text= "white"  className='text-center' border="danger" style={{ margin: '10px' }}>
@@ -37,11 +77,11 @@ function App() {
     <Card.Body>
       <Card.Title>Recover</Card.Title>
       <Card.Text>
-        99
+      {latest.recovered}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small>Last updated 3 mins ago</small>
+      <small>Last updated {lastUpdated}</small>
     </Card.Footer>
   </Card>
 </CardGroup>
