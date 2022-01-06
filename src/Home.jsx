@@ -1,12 +1,12 @@
 import React from 'react';
 
 
-const Home = ()=> {
+function App() {
   return (
-    <>
-    <h1>Welcome Home</h1>
-    </>
+    <div>
+    Hi
+    </div>
   );
 };
 
-export default Home;
+export default App;
