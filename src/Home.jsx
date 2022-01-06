@@ -25,20 +25,35 @@ function App() {
 
   const date= new Date(parseInt(latest.updated));
   const lastUpdated = date.toString();
-  const countries = results.map(data=>{
+  const countries = results.map((data, i)=>{
   return (
   <Card 
+  key = {i}
   bg = "light"
    text= "dark" 
    className='text-center'
     border="success"
      style={{ margin: '10px' }}
      >
-    
+    <Card.Img variants = "top" src= {data.countryInfo.flag} />
     <Card.Body>
       <Card.Title>{data.country}</Card.Title>
       <Card.Text>
         Cases {data.cases}
+      </Card.Text>
+      <Card.Text>
+        Deaths {data.deaths}
+      </Card.Text>
+      <Card.Text>
+        Recovered {data.recovered}
+      </Card.Text><Card.Text>
+        Today's cases {data.todaycases}
+      </Card.Text><Card.Text>
+        Today's deaths {data.todaydeaths}
+      </Card.Text><Card.Text>
+        Active {data.active}
+      </Card.Text><Card.Text>
+      Critical {data.critical}
       </Card.Text>
     </Card.Body>
   </Card>
@@ -85,6 +100,7 @@ function App() {
     </Card.Footer>
   </Card>
 </CardGroup>
+{countries}
     </div>
   );
 };
